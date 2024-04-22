@@ -33,7 +33,7 @@ except KeyError:
     world_size = 1
     distributed.init_process_group(
         backend="nccl",
-        init_method="tcp://127.0.0.1:12584",
+        init_method="tcp://127.0.0.1:12585",
         rank=rank,
         world_size=world_size,
     )

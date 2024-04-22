@@ -149,9 +149,9 @@ if __name__ == '__main__':
     assert args.opset_version == 11, 'MMDet only support opset 11 now'
 
     if not args.input_img:
-        args.input_img = osp.join(
-            osp.dirname(__file__), '../tests/data/t1.jpg')
-
+#         args.input_img = osp.join(
+#             osp.dirname(__file__), '../tests/data/t1.jpg')
+        args.input_img = '/root/jinyfeng/datas/Solvay_conference_1927.png'
     if len(args.shape) == 1:
         input_shape = (1, 3, args.shape[0], args.shape[0])
     elif len(args.shape) == 2:

@@ -27,6 +27,7 @@ def init_detector(config, checkpoint=None, device='cuda:0', cfg_options=None):
     Returns:
         nn.Module: The constructed detector.
     """
+    print(isinstance(config, str))
     if isinstance(config, str):
         config = mmcv.Config.fromfile(config)
     elif not isinstance(config, mmcv.Config):

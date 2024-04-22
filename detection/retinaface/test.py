@@ -1,5 +1,6 @@
 import cv2
 import sys
+import time
 import numpy as np
 import datetime
 import os
@@ -12,9 +13,13 @@ scales = [1024, 1980]
 count = 1
 
 gpuid = 0
-detector = RetinaFace('./model/R50', 0, gpuid, 'net3')
+# detector = RetinaFace('./model/R50', 0, gpuid, 'net3')
+detector = RetinaFace('/root/jinyfeng/models/retinaface-model/R50', 0, gpuid, 'net3')
 
-img = cv2.imread('t1.jpg')
+# img = cv2.imread('t1.jpg')
+# img = cv2.imread('/root/jinyfeng/datas/20230801_faces_v2_2619id/ffcf5df2-d360-4a4b-bc18-ac6f9730547d@_470406342369098405.jpg')
+# img = cv2.imread('/root/jinyfeng/datas/Solvay_conference_1927.png')
+img = cv2.imread('/root/jinyfeng/datas/sensoro/sensoro_person_info/hly_511023.jpg')
 print(img.shape)
 im_shape = img.shape
 target_size = scales[0]
@@ -40,6 +45,14 @@ for c in range(count):
                                        do_flip=flip)
     print(c, faces.shape, landmarks.shape)
 
+t1=time.time()
+faces, landmarks = detector.detect(img,
+                                       thresh,
+                                       scales=scales,
+                                       do_flip=flip)
+t2 = time.time()
+print('detector.detect time: %s ms' % ((t2-t1)*1000))
+    
 if faces is not None:
     print('find', faces.shape[0], 'faces')
     for i in range(faces.shape[0]):
@@ -48,6 +61,7 @@ if faces is not None:
         #color = (255,0,0)
         color = (0, 0, 255)
         cv2.rectangle(img, (box[0], box[1]), (box[2], box[3]), color, 2)
+        crop_face = img[box[1]:box[3], box[0]:box[2]]
         if landmarks is not None:
             landmark5 = landmarks[i].astype(np.int)
             #print(landmark.shape)
@@ -61,3 +75,4 @@ if faces is not None:
     filename = './detector_test.jpg'
     print('writing', filename)
     cv2.imwrite(filename, img)
+    cv2.imwrite('./detect_face.jpg', crop_face)

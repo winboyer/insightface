@@ -54,6 +54,19 @@ def multiclass_nms(multi_bboxes,
     # remove low scoring boxes
     valid_mask = scores > score_thr
     inds = valid_mask.nonzero(as_tuple=False).squeeze(1)
+#     print(f"bboxes device: {bboxes.device}")
+#     print(f"scores device: {scores.device}")
+#     print(f"labels device: {labels.device}")
+#     print(f"inds device: {inds.device}")
+#     print('len(labels)======', len(labels))
+#     print('len(bboxes)======', len(bboxes))
+#     print('len(inds)======', len(inds))
+#     labels = labels.to(bboxes.device)
+
+    bboxes = bboxes.to(labels.device)
+    scores = scores.to(labels.device)
+    inds = inds.to(labels.device)
+    
     bboxes, scores, labels = bboxes[inds], scores[inds], labels[inds]
     if inds.numel() == 0:
         if torch.onnx.is_in_onnx_export():
